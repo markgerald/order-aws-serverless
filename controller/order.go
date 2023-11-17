@@ -37,7 +37,7 @@ func GetOrder(c *gin.Context) {
 	}
 	table := GetDb().Table("orders")
 	if err := table.Get("id", c.Params.ByName("id")).One(&order); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error ": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, order)
