@@ -22,7 +22,7 @@ jobs:
         with:
           go-version: '^1.19'
 
-      - name: Build Go executable
+      - name: Build Go Main executable
         run: |
           GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o bin/main main.go
 
@@ -31,7 +31,7 @@ jobs:
         with:
           go-version: '^1.19'
 
-      - name: Build Go executable
+      - name: Build Go Count Weekly executable
         run: |
           GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o count/bin/main count/main.go          
 

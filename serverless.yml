@@ -37,7 +37,7 @@ functions:
 
 custom:
   dynamodbTableName: orders-${self:provider.stage}
-  s3BucketName: orders-${self:provider.stage}
+  s3BucketName: orders-count-${self:provider.stage}
 
 resources:
   Resources:
