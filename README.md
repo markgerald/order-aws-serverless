@@ -1,0 +1,30 @@
+# VW Test
+## Description
+- 2 Golang Aplications / DynamoDB Table / S3 Bucket / API Gateway / Lambda Functions / CloudWatch Logs / CloudWatch Events / IAM Roles / IAM Policies
+
+## Infrastructure and Software Deployment
+- Serverless Framework(to local deploy, from your machine)
+- Setting ACCESS_KEY_ID and AWS_SECRET_ID in Github Actions Secrets
+
+### Run local
+serverless command:
+```
+serverless deploy --stage dev
+```
+
+## Testing api
+To test de api, send a post request to the api endpoint, with the following model body:
+```json
+{
+  "UserId": 123,
+  "IsPayed": false,
+  "Items": [
+    {
+      "Name": "Producy X",
+      "Price": 25.30,
+      "Amount": 2
+    }
+  ]
+}
+
+```
