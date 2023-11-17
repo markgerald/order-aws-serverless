@@ -36,6 +36,14 @@ functions:
       - http:
           path: /
           method: get
+      - http:
+          path: /{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+
     environment:
       DYNAMODB_TABLE: ${self:custom.dynamodbTableName}
   weeklyCountOrders:
