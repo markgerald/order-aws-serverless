@@ -2,11 +2,9 @@ package db
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
 	"log"
-	"os"
 )
 
 var DB *dynamo.DB
@@ -14,8 +12,7 @@ var DB *dynamo.DB
 func InitDb() *dynamo.DB {
 	awsConfig := &aws.Config{
 		Region: aws.String("us-east-1"), // Especifique a região
-		Credentials: credentials.NewStaticCredentials(
-			os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), ""),
+
 	}
 
 	sess, err := session.NewSession(awsConfig)
