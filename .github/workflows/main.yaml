@@ -33,4 +33,4 @@ jobs:
       - name: Deploy with Serverless Framework
         run: |
           npm install -g serverless
-          serverless deploy --stage ${{ github.event.deployment.environment }}
+          serverless deploy
