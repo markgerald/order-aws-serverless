@@ -21,7 +21,7 @@ jobs:
 
       - name: Build Go executable
         run: |
-          GOOS=linux GOARCH=amd64 go build -o bin/hello hello.go
+          GOOS=linux GOARCH=amd64 go build -o bin/main main.go
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
