@@ -14,7 +14,7 @@ import (
 
 func PersistFile(itemCount int) {
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"), // Replace with your AWS region
+		Region: aws.String("us-east-1"),
 	})
 	uploader := s3manager.NewUploader(sess)
 
