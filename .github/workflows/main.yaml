@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -17,15 +20,15 @@ jobs:
       - name: Replace string ACCESS_KEY in .env file
         uses: MathieuSoysal/replace-string-in-file@v1.0.0
         with:
-          file: .env
-          old-string: ACCESS_KEY
+          file: db.db.go
+          old-string: AWS_ACCESS_KEY_ID
           new-string: ${{ secrets.ACCESS_KEY_ID }}
 
       - name: Replace string SECRET_KEY in .env file
         uses: MathieuSoysal/replace-string-in-file@v1.0.0
         with:
-          file: .env
-          old-string: SECRET_KEY
+          file: db/db.go
+          old-string: AWS_SECRET_ACCESS_KEY
           new-string: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Set up Go
