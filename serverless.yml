@@ -16,6 +16,15 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - "Fn::GetAtt": [OrdersDynamoDBTable, Arn]
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:DeleteObject
+        - s3:ListBucket
+      Resource:
+        - "arn:aws:s3:::${self:custom.dynamodbTableName}-${self:provider.stage}/*"
+        - "arn:aws:s3:::${self:custom.dynamodbTableName}-${self:provider.stage}"
 
 functions:
   apiOrders:

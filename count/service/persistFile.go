@@ -31,8 +31,8 @@ func PersistFile(itemCount int) {
 		Body:   bytes.NewReader(csvData.Bytes()),
 	})
 	if err != nil {
-		log.Fatalf("Unable to upload %q to %q, %v", "item-count.csv", "your-bucket-name", err)
+		log.Fatalf("Unable to upload %q to %q, %v", "item-count.csv", os.Getenv("S3_BUCKET"), err)
 	}
 
-	fmt.Printf("Successfully uploaded %q to %q\n", "item-count.csv", "your-bucket-name")
+	fmt.Printf("Successfully uploaded %q to %q\n", "item-count.csv", os.Getenv("S3_BUCKET"))
 }
