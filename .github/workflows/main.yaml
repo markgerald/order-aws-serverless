@@ -17,20 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Replace string ACCESS_KEY in .env file
-        uses: MathieuSoysal/replace-string-in-file@v1.0.0
-        with:
-          file: .env
-          old-string: ACCESS_KEY
-          new-string: ${{ secrets.ACCESS_KEY_ID }}
-
-      - name: Replace string SECRET_KEY in .env file
-        uses: MathieuSoysal/replace-string-in-file@v1.0.0
-        with:
-          file: .env
-          old-string: SECRET_KEY
-          new-string: ${{ secrets.AWS_SECRET_ACCESS_KEY_SCAPED }}
-
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
