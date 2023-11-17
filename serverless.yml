@@ -3,7 +3,7 @@ service: orders-lambda-service
 provider:
   name: aws
   runtime: go1.x
-  stage: dev
+  stage: prod
   region: us-east-1
   iamRoleStatements:
     - Effect: Allow
@@ -18,7 +18,7 @@ provider:
         - "Fn::GetAtt": [OrdersDynamoDBTable, Arn]
 
 functions:
-  order:
+  apiOrders:
     handler: bin/main
     events:
       - http:
