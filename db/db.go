@@ -11,8 +11,7 @@ var DB *dynamo.DB
 
 func InitDb() *dynamo.DB {
 	awsConfig := &aws.Config{
-		Region: aws.String("us-east-1"), // Especifique a região
-
+		Region: aws.String("us-east-1"),
 	}
 
 	sess, err := session.NewSession(awsConfig)

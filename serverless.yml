@@ -26,9 +26,18 @@ functions:
           method: post
     environment:
       DYNAMODB_TABLE: ${self:custom.dynamodbTableName}
+  weeklyCountOrders:
+    handler: count/bin/main
+    events:
+      - schedule:
+          rate: cron(0 12 ? * SUN *)
+    environment:
+      DYNAMODB_TABLE: ${self:custom.dynamodbTableName}
+      S3_BUCKET: ${self:custom.s3BucketName}
 
 custom:
   dynamodbTableName: orders-${self:provider.stage}
+  s3BucketName: orders-${self:provider.stage}
 
 resources:
   Resources:
@@ -43,3 +52,8 @@ resources:
           - AttributeName: id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+
+    OrderS3Bucket:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: ${self:custom.s3BucketName}

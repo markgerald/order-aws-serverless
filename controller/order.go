@@ -35,7 +35,7 @@ func GetOrder(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	table := GetDb().Table("orders")
+	table := GetDb().Table(os.Getenv("DYNAMODB_TABLE"))
 	if err := table.Get("id", c.Params.ByName("id")).One(&order); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error ": err.Error()})
 		return
@@ -45,7 +45,7 @@ func GetOrder(c *gin.Context) {
 
 func GetOrders(c *gin.Context) {
 	var orders []model.Order
-	table := GetDb().Table("orders")
+	table := GetDb().Table(os.Getenv("DYNAMODB_TABLE"))
 	if err := table.Scan().All(&orders); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

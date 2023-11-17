@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Go
+      - name: Set up Go Main
         uses: actions/setup-go@v2
         with:
           go-version: '^1.19'
@@ -25,6 +25,15 @@ jobs:
       - name: Build Go executable
         run: |
           GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o bin/main main.go
+
+      - name: Set up Go Count S3
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.19'
+
+      - name: Build Go executable
+        run: |
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o count/bin/main count/main.go          
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
