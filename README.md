@@ -28,3 +28,7 @@ To test de api, send a post request to the api endpoint, with the following mode
 }
 
 ```
+### Other http methods
+From same endpoint, you can use 2 get methods:
+- /{id} - Get a specific order
+- / - Get all orders
