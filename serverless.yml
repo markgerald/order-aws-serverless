@@ -24,9 +24,6 @@ functions:
       - http:
           path: /
           method: post
-      - http:
-          path: /
-          method: get
     environment:
       DYNAMODB_TABLE: ${self:custom.dynamodbTableName}
 
