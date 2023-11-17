@@ -20,7 +20,7 @@ jobs:
       - name: Replace string ACCESS_KEY in .env file
         uses: MathieuSoysal/replace-string-in-file@v1.0.0
         with:
-          file: db.db.go
+          file: db/db.go
           old-string: AWS_ACCESS_KEY_ID
           new-string: ${{ secrets.ACCESS_KEY_ID }}
 
