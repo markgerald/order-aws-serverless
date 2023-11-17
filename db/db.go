@@ -15,7 +15,7 @@ func InitDb() *dynamo.DB {
 	awsConfig := &aws.Config{
 		Region: aws.String("us-east-1"), // Especifique a região
 		Credentials: credentials.NewStaticCredentials(
-			os.Getenv("ACCESS_KEY_ID"), os.Getenv("YOUR_SECRET_ACCESS_KEY"), ""),
+			os.Getenv("ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), ""),
 	}
 
 	sess, err := session.NewSession(awsConfig)

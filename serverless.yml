@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: go1.x
   stage: dev
-  region: us-east-1 # Escolha a região que deseja implantar
+  region: us-east-1
   iamRoleStatements:
     - Effect: Allow
       Action:
