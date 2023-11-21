@@ -13,7 +13,7 @@ serverless deploy --stage dev
 ```
 
 ## Testing api
-To test de api, send a post request to the api endpoint, with the following model body:
+To test this api, send a post request to the api endpoint, with the following model body:
 ```json
 {
   "UserId": 123,
