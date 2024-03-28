@@ -43,7 +43,20 @@ functions:
             parameters:
               paths:
                 id: true
-
+      - http:
+          path: /{id}
+          method: put
+          request:
+            parameters:
+              paths:
+                id: true
+      - http:
+          path: /{id}
+          method: delete
+          request:
+            parameters:
+              paths:
+                id: true
     environment:
       DYNAMODB_TABLE: ${self:custom.dynamodbTableName}
   weeklyCountOrders:

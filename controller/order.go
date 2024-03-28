@@ -2,53 +2,95 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/guregu/dynamo"
-	"github.com/markgerald/vw-order/db"
-	"github.com/markgerald/vw-order/model"
+	"github.com/markgerald/vw-order/data/request"
+	"github.com/markgerald/vw-order/data/response"
+	"github.com/markgerald/vw-order/helper"
 	"github.com/markgerald/vw-order/service"
-	"net/http"
-	"os"
+	"log"
 )
 
-func GetDb() *dynamo.DB {
-	return db.InitDb()
+type OrderController struct {
+	orderService service.OrderService
 }
 
-func AddOrder(c *gin.Context) {
-	var newOrder model.Order
-	if err := c.BindJSON(&newOrder); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+func NewOrderController(orderService service.OrderService) *OrderController {
+	return &OrderController{
+		orderService: orderService,
 	}
-	table := GetDb().Table(os.Getenv("DYNAMODB_TABLE"))
-	calc := service.SumOrder(newOrder)
-	if err := table.Put(calc).Run(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusCreated, calc)
 }
 
-func GetOrder(c *gin.Context) {
-	var order model.Order
-	if err := c.BindJSON(&order); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+func (controller *OrderController) Create(ctx *gin.Context) {
+	log.Printf("Create Order")
+	createOrderRequest := request.CreateOrdersRequest{}
+	err := ctx.ShouldBindJSON(&createOrderRequest)
+	helper.ErrorPanic(err)
+
+	controller.orderService.Create(createOrderRequest)
+	webresponse := response.Response{
+		Code:   201,
+		Status: "Created",
+		Data:   nil,
 	}
-	table := GetDb().Table(os.Getenv("DYNAMODB_TABLE"))
-	if err := table.Get("id", c.Params.ByName("id")).One(&order); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error ": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, order)
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(200, webresponse)
 }
 
-func GetOrders(c *gin.Context) {
-	var orders []model.Order
-	table := GetDb().Table(os.Getenv("DYNAMODB_TABLE"))
-	if err := table.Scan().All(&orders); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+func (controller *OrderController) Update(ctx *gin.Context) {
+	log.Printf("Update Order")
+	updateOrderRequest := request.UpdateOrdersRequest{}
+	err := ctx.ShouldBindJSON(&updateOrderRequest)
+	helper.ErrorPanic(err)
+
+	orderId := ctx.Param("id")
+	updateOrderRequest.ID = orderId
+	controller.orderService.Update(updateOrderRequest)
+
+	webresponse := response.Response{
+		Code:   200,
+		Status: "OK",
+		Data:   nil,
 	}
-	c.JSON(http.StatusOK, orders)
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(200, webresponse)
+}
+
+func (controller *OrderController) Delete(ctx *gin.Context) {
+	log.Printf("Delete Order")
+	orderId := ctx.Param("id")
+	controller.orderService.Delete(orderId)
+
+	webresponse := response.Response{
+		Code:   200,
+		Status: "OK",
+		Data:   nil,
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(200, webresponse)
+}
+
+func (controller *OrderController) FindByID(ctx *gin.Context) {
+	log.Printf("Find Order By ID")
+	orderId := ctx.Param("id")
+	orderResponse := controller.orderService.FindByID(orderId)
+
+	webresponse := response.Response{
+		Code:   200,
+		Status: "OK",
+		Data:   orderResponse,
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(200, webresponse)
+}
+
+func (controller *OrderController) FindAll(ctx *gin.Context) {
+	log.Printf("Find All Orders")
+	ordersResponse := controller.orderService.FindAll()
+
+	webresponse := response.Response{
+		Code:   200,
+		Status: "OK",
+		Data:   ordersResponse,
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(200, webresponse)
 }
