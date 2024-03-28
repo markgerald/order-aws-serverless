@@ -8,11 +8,11 @@ import (
 
 func NewRouter(ordersController *controller.OrderController) *ginadapter.GinLambda {
 	router := gin.Default()
-	router.POST("/orders", ordersController.Create)
-	router.PUT("/orders/:id", ordersController.Update)
-	router.DELETE("/orders/:id", ordersController.Delete)
-	router.GET("/orders", ordersController.FindAll)
-	router.GET("/orders/:id", ordersController.FindByID)
+	router.POST("/", ordersController.Create)
+	router.PUT("/:id", ordersController.Update)
+	router.DELETE("/:id", ordersController.Delete)
+	router.GET("/", ordersController.FindAll)
+	router.GET("/:id", ordersController.FindByID)
 
 	return ginadapter.New(router)
 }
