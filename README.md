@@ -1,4 +1,4 @@
-# VW Test
+# GO / Gin framework Example of best pratices
 ## Description
 - 2 Golang Aplications / DynamoDB Table / S3 Bucket / API Gateway / Lambda Functions / CloudWatch Logs / CloudWatch Events / IAM Roles / IAM Policies
 
