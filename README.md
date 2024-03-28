@@ -32,3 +32,6 @@ To test this api, send a post request to the api endpoint, with the following mo
 From same endpoint, you can use 2 get methods:
 - /{id} - Get a specific order
 - / - Get all orders
+- / - post create an order
+- /{id} - put update an order
+- /{id} - delete an order
