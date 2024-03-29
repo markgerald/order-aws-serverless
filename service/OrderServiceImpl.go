@@ -30,7 +30,7 @@ func (o OrderServiceImpl) Create(orders request.CreateOrdersRequest) {
 		IsPayed: orders.IsPayed,
 		Items:   orders.Items,
 	}
-	o.OrdersRepository.Save(orderModel)
+	o.OrdersRepository.Save(SumOrder(orderModel))
 }
 
 func (o OrderServiceImpl) Update(orders request.UpdateOrdersRequest) response.OrdersResponse {

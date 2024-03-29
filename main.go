@@ -14,7 +14,7 @@ import (
 
 var ginLambda *ginadapter.GinLambda
 
-func init() {
+func Init() {
 	DB := db.InitDb()
 	validate := validator.New()
 	orderRepository := repository.NewOrdersRepositoryImpl(DB)
@@ -28,5 +28,6 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 }
 
 func main() {
+	Init()
 	lambda.Start(Handler)
 }

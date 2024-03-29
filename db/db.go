@@ -7,8 +7,6 @@ import (
 	"log"
 )
 
-var DB *dynamo.DB
-
 func InitDb() *dynamo.DB {
 	awsConfig := &aws.Config{
 		Region: aws.String("us-east-1"),
