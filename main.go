@@ -14,20 +14,16 @@ import (
 
 var ginLambda *ginadapter.GinLambda
 
-func Init() {
+func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	DB := db.InitDb()
 	validate := validator.New()
 	orderRepository := repository.NewOrdersRepositoryImpl(DB)
 	orderService := service.NewOrderServiceImpl(orderRepository, validate)
 	orderController := controller.NewOrderController(orderService)
 	router.NewRouter(orderController)
-}
-
-func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	return ginLambda.Proxy(req)
 }
 
 func main() {
-	Init()
 	lambda.Start(Handler)
 }
