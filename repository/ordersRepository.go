@@ -50,6 +50,7 @@ func (r *OrdersRepositoryImpl) FindById(id string) (model.Order, error) {
 	table := r.Db.Table("orders-prod")
 	err := table.Get("ID", id).One(&order)
 	if err != nil {
+		log.Printf("Error fetching all orders: %v", err)
 		return order, err
 	}
 	return order, nil
