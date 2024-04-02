@@ -5,6 +5,7 @@ provider:
   runtime: go1.x
   stage: prod
   region: us-east-1
+  accountId: 674938640766
   iamRoleStatements:
     - Effect: Allow
       Action:
