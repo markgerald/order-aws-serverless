@@ -52,7 +52,7 @@ func (o OrderServiceImpl) Delete(orderId string) {
 	o.OrdersRepository.Delete(orderId)
 }
 
-func (o OrderServiceImpl) FindByID(orderId string) response.OrdersResponse {
+func (o OrderServiceImpl) FindByID(orderId string) (response.OrdersResponse, error) {
 	orderData, err := o.OrdersRepository.FindById(orderId)
 	helper.ErrorPanic(err)
 
@@ -63,7 +63,7 @@ func (o OrderServiceImpl) FindByID(orderId string) response.OrdersResponse {
 		IsPayed: orderData.IsPayed,
 		Items:   orderData.Items,
 	}
-	return orderResponse
+	return orderResponse, nil
 }
 
 func (o OrderServiceImpl) FindAll() []response.OrdersResponse {
