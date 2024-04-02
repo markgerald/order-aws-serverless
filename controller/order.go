@@ -71,7 +71,18 @@ func (controller *OrderController) Delete(ctx *gin.Context) {
 func (controller *OrderController) FindByID(ctx *gin.Context) {
 	log.Printf("Find Order By ID")
 	orderId := ctx.Param("id")
-	orderResponse := controller.orderService.FindByID(orderId)
+	orderResponse, err := controller.orderService.FindByID(orderId)
+
+	if err != nil {
+		webresponse := response.Response{
+			Code:   404,
+			Status: "Not Found",
+			Data:   nil,
+		}
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(404, webresponse)
+		return
+	}
 
 	webresponse := response.Response{
 		Code:   200,
