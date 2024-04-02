@@ -17,12 +17,12 @@ func NewOrdersRepositoryImpl(Db *dynamo.DB) *OrdersRepositoryImpl {
 }
 
 func (r *OrdersRepositoryImpl) Save(orders model.Order) {
-	table := r.Db.Table("orders")
+	table := r.Db.Table("orders-prod")
 	table.Put(orders).Run()
 }
 
 func (r *OrdersRepositoryImpl) Update(orders model.Order) {
-	table := r.Db.Table("orders")
+	table := r.Db.Table("orders-prod")
 	err := table.Put(orders).Run()
 	if err != nil {
 		return
@@ -30,13 +30,13 @@ func (r *OrdersRepositoryImpl) Update(orders model.Order) {
 }
 
 func (r *OrdersRepositoryImpl) Delete(orderId string) {
-	table := r.Db.Table("orders")
+	table := r.Db.Table("orders-prod")
 	table.Delete("id", orderId).Run()
 }
 
 func (r *OrdersRepositoryImpl) FindAll() []model.Order {
 	var orders []model.Order
-	table := r.Db.Table("orders")
+	table := r.Db.Table("orders-prod")
 	err := table.Scan().All(&orders)
 	if err != nil {
 		log.Printf("Error fetching all orders: %v", err)
@@ -47,7 +47,7 @@ func (r *OrdersRepositoryImpl) FindAll() []model.Order {
 
 func (r *OrdersRepositoryImpl) FindById(id string) (model.Order, error) {
 	var order model.Order
-	table := r.Db.Table("orders")
+	table := r.Db.Table("orders-prod")
 	err := table.Get("ID", id).One(&order)
 	if err != nil {
 		return order, err
