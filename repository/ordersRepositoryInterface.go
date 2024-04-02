@@ -7,5 +7,5 @@ type OrdersRepositoryInterface interface {
 	Update(orders model.Order)
 	Delete(orderId string)
 	FindAll() []model.Order
-	FindById(id string) (orders model.Order, err error)
+	FindById(id string) (orders *model.Order, err error)
 }
