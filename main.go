@@ -28,7 +28,7 @@ func main() {
 	orderRepository := repository.NewOrdersRepositoryImpl(DB)
 	orderService := service.NewOrderServiceImpl(orderRepository, validate)
 	orderController := controller.NewOrderController(orderService)
-	ginLambda = router.NewRouter(orderController) // Removed the ":" to assign to the package-level ginLambda
+	ginLambda = router.NewRouter(orderController)
 	if ginLambda == nil {
 		log.Fatal("Failed to initialize ginLambda")
 	}

@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/guregu/dynamo"
 	"github.com/markgerald/vw-order/model"
+	"log"
 )
 
 type OrdersRepositoryImpl struct {
@@ -38,6 +39,7 @@ func (r *OrdersRepositoryImpl) FindAll() []model.Order {
 	table := r.Db.Table("orders")
 	err := table.Scan().All(&orders)
 	if err != nil {
+		log.Printf("Error fetching all orders: %v", err)
 		return nil
 	}
 	return orders
