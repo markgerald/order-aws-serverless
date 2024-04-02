@@ -10,11 +10,15 @@ import (
 	"github.com/markgerald/vw-order/repository"
 	"github.com/markgerald/vw-order/router"
 	"github.com/markgerald/vw-order/service"
+	"log"
 )
 
 var ginLambda *ginadapter.GinLambda
 
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	if ginLambda == nil {
+		log.Fatal("ginLambda is not initialized")
+	}
 	return ginLambda.Proxy(req)
 }
 
@@ -24,6 +28,9 @@ func main() {
 	orderRepository := repository.NewOrdersRepositoryImpl(DB)
 	orderService := service.NewOrderServiceImpl(orderRepository, validate)
 	orderController := controller.NewOrderController(orderService)
-	router.NewRouter(orderController)
+	ginLambda := router.NewRouter(orderController)
+	if ginLambda == nil {
+		log.Fatal("Failed to initialize ginLambda")
+	}
 	lambda.Start(Handler)
 }
