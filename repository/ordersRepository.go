@@ -48,7 +48,7 @@ func (r *OrdersRepositoryImpl) FindAll() []model.Order {
 func (r *OrdersRepositoryImpl) FindById(id string) (model.Order, error) {
 	var order model.Order
 	table := r.Db.Table("orders-prod")
-	err := table.Get("ID", id).One(&order)
+	err := table.Get("id", id).One(&order)
 	if err != nil {
 		log.Printf("Error fetching all orders: %v", err)
 		return order, err
