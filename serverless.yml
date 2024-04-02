@@ -30,7 +30,7 @@ provider:
 functions:
   apiOrders:
     handler: bin/main
-    role: arn:aws:iam::${self:provider.accountId}:role/service-role/lambda-role
+    role: arn:aws:iam::${self:provider.accountId}:role/orders-lambda-service-prod-us-east-1-lambdaRole
     events:
       - http:
           path: /
