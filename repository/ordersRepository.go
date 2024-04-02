@@ -45,13 +45,13 @@ func (r *OrdersRepositoryImpl) FindAll() []model.Order {
 	return orders
 }
 
-func (r *OrdersRepositoryImpl) FindById(id string) (model.Order, error) {
+func (r *OrdersRepositoryImpl) FindById(id string) (*model.Order, error) {
 	var order model.Order
 	table := r.Db.Table("orders-prod")
-	err := table.Get("id", id).One(&order)
+	err := table.Get("ID", id).One(&order)
 	if err != nil {
-		log.Printf("Error fetching all orders: %v", err)
-		return order, err
+		log.Printf("Error fetching this order: %v", err)
+		return nil, err
 	}
-	return order, nil
+	return &order, nil
 }
