@@ -9,6 +9,6 @@ type OrderService interface {
 	Create(orders request.CreateOrdersRequest)
 	Update(orders request.UpdateOrdersRequest) response.OrdersResponse
 	Delete(orderId string)
-	FindByID(orderId string) response.OrdersResponse
+	FindByID(orderId string) (response.OrdersResponse, error)
 	FindAll() []response.OrdersResponse
 }
