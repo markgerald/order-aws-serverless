@@ -21,9 +21,8 @@ func (r *OrdersRepositoryImpl) Save(orders model.Order) {
 	table.Put(orders).Run()
 }
 
-func (r *OrdersRepositoryImpl) Update(orderId string) (error error) {
+func (r *OrdersRepositoryImpl) Update(order model.Order) (error error) {
 	table := r.Db.Table("orders-prod")
-	order := table.Get("id", orderId).One(&table)
 	err := table.Put(order).Run()
 	if err != nil {
 		log.Printf("Error updating order: %v", err)
