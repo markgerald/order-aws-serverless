@@ -45,48 +45,23 @@ func (controller *OrderController) Update(ctx *gin.Context) {
 	updateOrderRequest.ID = orderId
 	update, err := controller.orderService.Update(updateOrderRequest)
 	if err != nil {
-		webresponse := response.Response{
-			Code:   404,
-			Status: "Order Not Found",
-			Data:   nil,
-		}
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(404, webresponse)
+		response.SendErrorResponse(ctx, 404, "Order Not Found")
 		return
 	}
 
-	webresponse := response.Response{
-		Code:   200,
-		Status: "OK",
-		Data:   update,
-	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(200, webresponse)
+	response.SendSuccessResponse(ctx, 200, "OK", update)
 }
 
 func (controller *OrderController) Delete(ctx *gin.Context) {
 	log.Printf("Delete Order")
 	orderId := ctx.Param("id")
 	err := controller.orderService.Delete(orderId)
-
 	if err != nil {
-		webresponse := response.Response{
-			Code:   404,
-			Status: "Order Not Found",
-			Data:   nil,
-		}
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(404, webresponse)
+		response.SendErrorResponse(ctx, 404, "Order Not Found")
 		return
 	}
 
-	webresponse := response.Response{
-		Code:   200,
-		Status: "OK",
-		Data:   nil,
-	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(200, webresponse)
+	response.SendSuccessResponse(ctx, 200, "OK", nil)
 }
 
 func (controller *OrderController) FindByID(ctx *gin.Context) {
@@ -95,23 +70,11 @@ func (controller *OrderController) FindByID(ctx *gin.Context) {
 	orderResponse, err := controller.orderService.FindByID(orderId)
 
 	if err != nil {
-		webresponse := response.Response{
-			Code:   404,
-			Status: "Order Not Found",
-			Data:   nil,
-		}
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(404, webresponse)
+		response.SendErrorResponse(ctx, 404, "Order Not Found")
 		return
 	}
 
-	webresponse := response.Response{
-		Code:   200,
-		Status: "OK",
-		Data:   orderResponse,
-	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(200, webresponse)
+	response.SendSuccessResponse(ctx, 200, "OK", orderResponse)
 }
 
 func (controller *OrderController) FindAll(ctx *gin.Context) {
