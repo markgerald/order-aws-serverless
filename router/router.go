@@ -13,6 +13,6 @@ func NewRouter(ordersController *controller.OrderController) *ginadapter.GinLamb
 	router.DELETE("/:id", ordersController.Delete)
 	router.GET("/", ordersController.FindAll)
 	router.GET("/:id", ordersController.FindByID)
-
+	router.GET("/user/:userId", ordersController.FindByUserId)
 	return ginadapter.New(router)
 }
