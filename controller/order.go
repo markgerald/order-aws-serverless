@@ -24,23 +24,28 @@ func (controller *OrderController) Create(ctx *gin.Context) {
 	log.Printf("Create Order")
 	createOrderRequest := request.CreateOrdersRequest{}
 	err := ctx.ShouldBindJSON(&createOrderRequest)
-	helper.ErrorPanic(err)
-
-	controller.orderService.Create(createOrderRequest)
-	webresponse := response.Response{
-		Code:   201,
-		Status: "Created",
-		Data:   nil,
+	if err != nil {
+		response.SendErrorResponse(ctx, 400, "Validation Error: "+err.Error())
+		log.Fatalf("Error binding JSON: %v", err)
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(200, webresponse)
+	create, err := controller.orderService.Create(createOrderRequest)
+	if err != nil {
+		response.SendErrorResponse(ctx, 500, "Error creating order")
+		return
+	}
+	response.SendSuccessResponse(ctx, 200, "OK", create)
 }
 
 func (controller *OrderController) Update(ctx *gin.Context) {
 	log.Printf("Update Order")
 	updateOrderRequest := request.UpdateOrdersRequest{}
 	err := ctx.ShouldBindJSON(&updateOrderRequest)
-	helper.ErrorPanic(err)
+	if err != nil {
+		response.SendErrorResponse(ctx, 400, "Validation Error: "+err.Error())
+		log.Fatalf("Error binding JSON: %v", err)
+		return
+	}
 
 	orderId := ctx.Param("id")
 	updateOrderRequest.ID = orderId
@@ -99,8 +104,8 @@ func (controller *OrderController) FindAll(ctx *gin.Context) {
 
 func (controller *OrderController) FindByUserId(ctx *gin.Context) {
 	userId := ctx.Param("userId")
-	limit := ctx.DefaultQuery("limit", "10") // Default limit is 10
-	startKey := ctx.Query("startKey")        // StartKey is optional
+	limit := ctx.DefaultQuery("limit", "10")
+	startKey := ctx.Query("startKey")
 	ordersResponse, lastKey, err := controller.orderService.FindByUserId(userId, limit, startKey)
 	if err != nil {
 		response.SendErrorResponse(ctx, 500, "Internal Server Error")

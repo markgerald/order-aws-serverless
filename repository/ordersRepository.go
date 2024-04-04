@@ -19,9 +19,11 @@ func NewOrdersRepositoryImpl(Db *dynamo.DB) *OrdersRepositoryImpl {
 	}
 }
 
-func (r *OrdersRepositoryImpl) Save(orders model.Order) {
+func (r *OrdersRepositoryImpl) Save(order model.Order) model.Order {
 	table := r.Db.Table("orders-prod")
-	table.Put(orders).Run()
+	table.Put(order).Run()
+
+	return order
 }
 
 func (r *OrdersRepositoryImpl) Update(order model.Order) (error error) {

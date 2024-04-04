@@ -24,7 +24,7 @@ func NewOrderServiceImpl(
 	}
 }
 
-func (o OrderServiceImpl) Create(orders request.CreateOrdersRequest) {
+func (o OrderServiceImpl) Create(orders request.CreateOrdersRequest) (*response.OrdersResponse, error) {
 	err := o.Validate.Struct(orders)
 	helper.ErrorPanic(err)
 	orderModel := model.Order{
@@ -33,7 +33,18 @@ func (o OrderServiceImpl) Create(orders request.CreateOrdersRequest) {
 		IsPayed: orders.IsPayed,
 		Items:   orders.Items,
 	}
-	o.OrdersRepository.Save(SumOrder(orderModel))
+	save, err := o.OrdersRepository.Save(SumOrder(orderModel))
+	if err != nil {
+		return nil, err
+	}
+
+	return &response.OrdersResponse{
+		ID:      save.ID,
+		Total:   save.Total,
+		UserID:  save.UserID,
+		IsPayed: save.IsPayed,
+		Items:   save.Items,
+	}, nil
 }
 
 func (o OrderServiceImpl) Update(orders request.UpdateOrdersRequest) (*response.OrdersResponse, error) {

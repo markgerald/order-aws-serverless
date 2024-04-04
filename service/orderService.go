@@ -6,7 +6,7 @@ import (
 )
 
 type OrderService interface {
-	Create(orders request.CreateOrdersRequest)
+	Create(orders request.CreateOrdersRequest) (*response.OrdersResponse, error)
 	Update(orders request.UpdateOrdersRequest) (*response.OrdersResponse, error)
 	Delete(orderId string) (error error)
 	FindByID(orderId string) (*response.OrdersResponse, error)
