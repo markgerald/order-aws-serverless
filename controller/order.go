@@ -86,7 +86,7 @@ func (controller *OrderController) FindByID(ctx *gin.Context) {
 func (controller *OrderController) FindAll(ctx *gin.Context) {
 	log.Printf("Find All Orders")
 	limit := ctx.DefaultQuery("limit", "10")
-	startKey := ctx.Query("startKey")
+	startKey := ctx.Query("page")
 	limitInt, err := strconv.Atoi(limit)
 	helper.ErrorPanic(err)
 	ordersResponse, lastKey, err := controller.orderService.FindAll(limitInt, startKey)
