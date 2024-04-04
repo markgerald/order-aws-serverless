@@ -7,6 +7,7 @@ import (
 	"github.com/markgerald/vw-order/helper"
 	"github.com/markgerald/vw-order/service"
 	"log"
+	"strconv"
 )
 
 type OrderController struct {
@@ -79,13 +80,19 @@ func (controller *OrderController) FindByID(ctx *gin.Context) {
 
 func (controller *OrderController) FindAll(ctx *gin.Context) {
 	log.Printf("Find All Orders")
-	ordersResponse := controller.orderService.FindAll()
-
-	webresponse := response.Response{
-		Code:   200,
-		Status: "OK",
-		Data:   ordersResponse,
+	limit := ctx.DefaultQuery("limit", "10")
+	startKey := ctx.Query("startKey")
+	limitInt, err := strconv.Atoi(limit)
+	helper.ErrorPanic(err)
+	ordersResponse, lastKey, err := controller.orderService.FindAll(limitInt, startKey)
+	if err != nil {
+		response.SendErrorResponse(ctx, 500, "Internal Server Error")
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(200, webresponse)
+	data := map[string]interface{}{
+		"orders":  ordersResponse,
+		"lastKey": lastKey,
+	}
+
+	response.SendSuccessResponse(ctx, 200, "OK", data)
 }

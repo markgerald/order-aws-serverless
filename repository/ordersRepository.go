@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/guregu/dynamo"
 	"github.com/markgerald/vw-order/model"
 	"log"
@@ -41,15 +43,29 @@ func (r *OrdersRepositoryImpl) Delete(orderId string) (error error) {
 	return nil
 }
 
-func (r *OrdersRepositoryImpl) FindAll() []model.Order {
+func (r *OrdersRepositoryImpl) FindAll(limit int, startKey string) ([]model.Order, string, error) {
 	var orders []model.Order
 	table := r.Db.Table("orders-prod")
-	err := table.Scan().All(&orders)
+	scanOp := table.Scan().Limit(int64(limit))
+	if startKey != "" {
+		scanOp.StartFrom(map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(startKey),
+			},
+		})
+	}
+	lastEvaluatedKey, err := scanOp.AllWithLastEvaluatedKey(&orders)
 	if err != nil {
 		log.Printf("Error fetching all orders: %v", err)
-		return nil
+		return nil, "", err
 	}
-	return orders
+
+	lastKey := ""
+	if lastEvaluatedKey != nil {
+		lastKey = *lastEvaluatedKey["id"].S
+	}
+
+	return orders, lastKey, nil
 }
 
 func (r *OrdersRepositoryImpl) FindById(id string) (*model.Order, error) {

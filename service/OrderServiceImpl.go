@@ -80,8 +80,11 @@ func (o OrderServiceImpl) FindByID(orderId string) (*response.OrdersResponse, er
 	return &orderResponse, nil
 }
 
-func (o OrderServiceImpl) FindAll() []response.OrdersResponse {
-	result := o.OrdersRepository.FindAll()
+func (o OrderServiceImpl) FindAll(limit int, startKey string) ([]response.OrdersResponse, string, error) {
+	result, lastKey, err := o.OrdersRepository.FindAll(limit, startKey)
+	if err != nil {
+		return nil, "", err
+	}
 
 	var orders []response.OrdersResponse
 	for _, order := range result {
@@ -93,5 +96,5 @@ func (o OrderServiceImpl) FindAll() []response.OrdersResponse {
 			Items:   order.Items,
 		})
 	}
-	return orders
+	return orders, lastKey, nil
 }

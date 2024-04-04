@@ -10,5 +10,5 @@ type OrderService interface {
 	Update(orders request.UpdateOrdersRequest) (*response.OrdersResponse, error)
 	Delete(orderId string) (error error)
 	FindByID(orderId string) (*response.OrdersResponse, error)
-	FindAll() []response.OrdersResponse
+	FindAll(limit int, startKey string) ([]response.OrdersResponse, string, error)
 }

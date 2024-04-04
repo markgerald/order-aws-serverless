@@ -6,6 +6,6 @@ type OrdersRepositoryInterface interface {
 	Save(orders model.Order)
 	Update(orders model.Order) (error error)
 	Delete(orderId string) (error error)
-	FindAll() []model.Order
+	FindAll(limit int, startKey string) ([]model.Order, string, error)
 	FindById(id string) (order *model.Order, err error)
 }
