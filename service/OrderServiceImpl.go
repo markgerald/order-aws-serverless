@@ -14,7 +14,9 @@ type OrderServiceImpl struct {
 	Validate         *validator.Validate
 }
 
-func NewOrderServiceImpl(ordersRepository repository.OrdersRepositoryInterface, validate *validator.Validate) OrderService {
+func NewOrderServiceImpl(
+	ordersRepository repository.OrdersRepositoryInterface,
+	validate *validator.Validate) OrderService {
 	return &OrderServiceImpl{
 		OrdersRepository: ordersRepository,
 		Validate:         validate,
@@ -52,9 +54,11 @@ func (o OrderServiceImpl) Delete(orderId string) {
 	o.OrdersRepository.Delete(orderId)
 }
 
-func (o OrderServiceImpl) FindByID(orderId string) (response.OrdersResponse, error) {
+func (o OrderServiceImpl) FindByID(orderId string) (*response.OrdersResponse, error) {
 	orderData, err := o.OrdersRepository.FindById(orderId)
-	helper.ErrorPanic(err)
+	if err != nil {
+		return nil, err
+	}
 
 	orderResponse := response.OrdersResponse{
 		ID:      orderData.ID,
@@ -63,7 +67,7 @@ func (o OrderServiceImpl) FindByID(orderId string) (response.OrdersResponse, err
 		IsPayed: orderData.IsPayed,
 		Items:   orderData.Items,
 	}
-	return orderResponse, nil
+	return &orderResponse, nil
 }
 
 func (o OrderServiceImpl) FindAll() []response.OrdersResponse {
