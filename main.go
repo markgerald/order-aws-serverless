@@ -16,13 +16,6 @@ import (
 var ginLambda *ginadapter.GinLambda
 
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	if ginLambda == nil {
-		log.Fatal("ginLambda is not initialized")
-	}
-	return ginLambda.Proxy(req)
-}
-
-func main() {
 	DB := db.InitDb()
 	validate := validator.New()
 	orderRepository := repository.NewOrdersRepositoryImpl(DB)
@@ -32,5 +25,10 @@ func main() {
 	if ginLambda == nil {
 		log.Fatal("Failed to initialize ginLambda")
 	}
+
+	return ginLambda.Proxy(req)
+}
+
+func main() {
 	lambda.Start(Handler)
 }
