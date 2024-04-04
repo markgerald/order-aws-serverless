@@ -43,12 +43,22 @@ func (controller *OrderController) Update(ctx *gin.Context) {
 
 	orderId := ctx.Param("id")
 	updateOrderRequest.ID = orderId
-	controller.orderService.Update(updateOrderRequest)
+	update, err := controller.orderService.Update(updateOrderRequest)
+	if err != nil {
+		webresponse := response.Response{
+			Code:   404,
+			Status: "Order Not Found",
+			Data:   nil,
+		}
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(404, webresponse)
+		return
+	}
 
 	webresponse := response.Response{
 		Code:   200,
 		Status: "OK",
-		Data:   nil,
+		Data:   update,
 	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(200, webresponse)
@@ -57,7 +67,18 @@ func (controller *OrderController) Update(ctx *gin.Context) {
 func (controller *OrderController) Delete(ctx *gin.Context) {
 	log.Printf("Delete Order")
 	orderId := ctx.Param("id")
-	controller.orderService.Delete(orderId)
+	err := controller.orderService.Delete(orderId)
+
+	if err != nil {
+		webresponse := response.Response{
+			Code:   404,
+			Status: "Order Not Found",
+			Data:   nil,
+		}
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(404, webresponse)
+		return
+	}
 
 	webresponse := response.Response{
 		Code:   200,
@@ -76,7 +97,7 @@ func (controller *OrderController) FindByID(ctx *gin.Context) {
 	if err != nil {
 		webresponse := response.Response{
 			Code:   404,
-			Status: "Not Found",
+			Status: "Order Not Found",
 			Data:   nil,
 		}
 		ctx.Header("Content-Type", "application/json")

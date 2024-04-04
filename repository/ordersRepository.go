@@ -21,17 +21,25 @@ func (r *OrdersRepositoryImpl) Save(orders model.Order) {
 	table.Put(orders).Run()
 }
 
-func (r *OrdersRepositoryImpl) Update(orders model.Order) {
+func (r *OrdersRepositoryImpl) Update(orderId string) (error error) {
 	table := r.Db.Table("orders-prod")
-	err := table.Put(orders).Run()
+	order := table.Get("id", orderId).One(&table)
+	err := table.Put(order).Run()
 	if err != nil {
-		return
+		log.Printf("Error updating order: %v", err)
+		return err
 	}
+	return nil
 }
 
-func (r *OrdersRepositoryImpl) Delete(orderId string) {
+func (r *OrdersRepositoryImpl) Delete(orderId string) (error error) {
 	table := r.Db.Table("orders-prod")
-	table.Delete("id", orderId).Run()
+	err := table.Delete("id", orderId).Run()
+	if err != nil {
+		log.Printf("Error deleting order: %v", err)
+		return err
+	}
+	return nil
 }
 
 func (r *OrdersRepositoryImpl) FindAll() []model.Order {

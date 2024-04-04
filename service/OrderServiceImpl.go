@@ -7,6 +7,7 @@ import (
 	"github.com/markgerald/vw-order/helper"
 	"github.com/markgerald/vw-order/model"
 	"github.com/markgerald/vw-order/repository"
+	"log"
 )
 
 type OrderServiceImpl struct {
@@ -35,9 +36,12 @@ func (o OrderServiceImpl) Create(orders request.CreateOrdersRequest) {
 	o.OrdersRepository.Save(SumOrder(orderModel))
 }
 
-func (o OrderServiceImpl) Update(orders request.UpdateOrdersRequest) response.OrdersResponse {
+func (o OrderServiceImpl) Update(orders request.UpdateOrdersRequest) (*response.OrdersResponse, error) {
 	orderData, err := o.OrdersRepository.FindById(orders.ID)
-	helper.ErrorPanic(err)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+		return nil, err
+	}
 
 	orderResponse := response.OrdersResponse{
 		ID:      orderData.ID,
@@ -47,11 +51,17 @@ func (o OrderServiceImpl) Update(orders request.UpdateOrdersRequest) response.Or
 		Items:   orderData.Items,
 	}
 
-	return orderResponse
+	o.OrdersRepository.Update(SumOrder(*orderData))
+
+	return &orderResponse, nil
 }
 
-func (o OrderServiceImpl) Delete(orderId string) {
-	o.OrdersRepository.Delete(orderId)
+func (o OrderServiceImpl) Delete(orderId string) (error error) {
+	err := o.OrdersRepository.Delete(orderId)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o OrderServiceImpl) FindByID(orderId string) (*response.OrdersResponse, error) {
