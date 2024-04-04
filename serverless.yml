@@ -39,6 +39,9 @@ functions:
           path: /
           method: get
       - http:
+          path: /user/{userId}
+          method: get
+      - http:
           path: /{id}
           method: get
           request:
