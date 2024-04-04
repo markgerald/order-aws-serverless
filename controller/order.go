@@ -115,4 +115,9 @@ func (controller *OrderController) FindByUserId(ctx *gin.Context) {
 		"data":    ordersResponse,
 		"lastKey": lastKey,
 	})
+	data := map[string]interface{}{
+		"orders":  ordersResponse,
+		"lastKey": lastKey,
+	}
+	response.SendSuccessResponse(ctx, 200, "OK", data)
 }
