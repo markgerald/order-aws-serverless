@@ -98,3 +98,23 @@ func (o OrderServiceImpl) FindAll(limit int, startKey string) ([]response.Orders
 	}
 	return orders, lastKey, nil
 }
+
+func (s *OrderServiceImpl) FindByUserId(userId string, limit string, startKey string) ([]response.OrdersResponse, string, error) {
+	result, lastKey, err := s.OrdersRepository.FindByUserId(userId, limit, startKey)
+	if err != nil {
+		return nil, "", err
+	}
+	var ordersResponse []response.OrdersResponse
+	var orders []response.OrdersResponse
+	for _, order := range result {
+		orders = append(orders, response.OrdersResponse{
+			ID:      order.ID,
+			Total:   order.Total,
+			UserID:  order.UserID,
+			IsPayed: order.IsPayed,
+			Items:   order.Items,
+		})
+	}
+
+	return ordersResponse, lastKey, nil
+}

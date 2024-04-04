@@ -8,4 +8,5 @@ type OrdersRepositoryInterface interface {
 	Delete(orderId string) (error error)
 	FindAll(limit int, startKey string) ([]model.Order, string, error)
 	FindById(id string) (order *model.Order, err error)
+	FindByUserId(userId string, limit string, startKey string) ([]model.Order, string, error)
 }

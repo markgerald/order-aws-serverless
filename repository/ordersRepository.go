@@ -6,6 +6,7 @@ import (
 	"github.com/guregu/dynamo"
 	"github.com/markgerald/vw-order/model"
 	"log"
+	"strconv"
 )
 
 type OrdersRepositoryImpl struct {
@@ -77,4 +78,30 @@ func (r *OrdersRepositoryImpl) FindById(id string) (*model.Order, error) {
 		return nil, err
 	}
 	return &order, nil
+}
+
+func (r *OrdersRepositoryImpl) FindByUserId(userId string, limit string, startKey string) ([]model.Order, string, error) {
+	var orders []model.Order
+	table := r.Db.Table("orders-prod")
+	intConvert, _ := strconv.ParseInt(limit, 10, 64)
+	queryOp := table.Get("userId", userId).Limit(intConvert)
+	if startKey != "" {
+		queryOp.StartFrom(map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(startKey),
+			},
+		})
+	}
+	lastEvaluatedKey, err := queryOp.AllWithLastEvaluatedKey(&orders)
+	if err != nil {
+		log.Printf("Error fetching orders by userId: %v", err)
+		return nil, "", err
+	}
+
+	lastKey := ""
+	if lastEvaluatedKey != nil {
+		lastKey = *lastEvaluatedKey["id"].S
+	}
+
+	return orders, lastKey, nil
 }

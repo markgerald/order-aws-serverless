@@ -96,3 +96,18 @@ func (controller *OrderController) FindAll(ctx *gin.Context) {
 
 	response.SendSuccessResponse(ctx, 200, "OK", data)
 }
+
+func (controller *OrderController) FindByUserId(ctx *gin.Context) {
+	userId := ctx.Param("userId")
+	limit := ctx.DefaultQuery("limit", "10") // Default limit is 10
+	startKey := ctx.Query("startKey")        // StartKey is optional
+	ordersResponse, lastKey, err := controller.orderService.FindByUserId(userId, limit, startKey)
+	if err != nil {
+		response.SendErrorResponse(ctx, 500, "Internal Server Error")
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"data":    ordersResponse,
+		"lastKey": lastKey,
+	})
+}
