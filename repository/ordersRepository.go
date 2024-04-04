@@ -19,11 +19,15 @@ func NewOrdersRepositoryImpl(Db *dynamo.DB) *OrdersRepositoryImpl {
 	}
 }
 
-func (r *OrdersRepositoryImpl) Save(order model.Order) model.Order {
+func (r *OrdersRepositoryImpl) Save(order model.Order) (model.Order, error) {
 	table := r.Db.Table("orders-prod")
-	table.Put(order).Run()
+	err := table.Put(order).Run()
+	if err != nil {
+		log.Printf("Error saving order: %v", err)
+		return model.Order{}, err
+	}
 
-	return order
+	return order, nil
 }
 
 func (r *OrdersRepositoryImpl) Update(order model.Order) (error error) {
