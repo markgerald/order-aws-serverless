@@ -14,5 +14,6 @@ func NewRouter(ordersController *controller.OrderController) *ginadapter.GinLamb
 	router.GET("/", ordersController.FindAll)
 	router.GET("/:id", ordersController.FindByID)
 	router.GET("/user/:userId", ordersController.FindByUserId)
+
 	return ginadapter.New(router)
 }
