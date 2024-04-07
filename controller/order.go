@@ -103,7 +103,7 @@ func (controller *OrderController) FindAll(ctx *gin.Context) {
 }
 
 func (controller *OrderController) FindByUserId(ctx *gin.Context) {
-	userId := ctx.Param("id")
+	userId := ctx.Param("userId")
 	limit := ctx.DefaultQuery("limit", "10")
 	startKey := ctx.Query("page")
 	ordersResponse, lastKey, err := controller.orderService.FindByUserId(userId, limit, startKey)

@@ -39,7 +39,7 @@ functions:
           path: /
           method: get
       - http:
-          path: /user/{id}
+          path: /user/{userId}
           method: get
       - http:
           path: /{id}
