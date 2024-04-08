@@ -86,7 +86,7 @@ func (r *OrdersRepositoryImpl) FindById(id string) (*model.Order, error) {
 	return &order, nil
 }
 
-func (r *OrdersRepositoryImpl) FindByUserId(userId string, limit string, startKey string) ([]model.Order, string, error) {
+func (r *OrdersRepositoryImpl) FindByUserId(userId int, limit string, startKey string) ([]model.Order, string, error) {
 	var orders []model.Order
 	table := r.Db.Table("orders-prod")
 	intConvert, _ := strconv.ParseInt(limit, 10, 64)

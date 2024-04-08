@@ -110,7 +110,7 @@ func (o OrderServiceImpl) FindAll(limit int, startKey string) ([]response.Orders
 	return orders, lastKey, nil
 }
 
-func (s *OrderServiceImpl) FindByUserId(userId string, limit string, startKey string) ([]response.OrdersResponse, string, error) {
+func (s *OrderServiceImpl) FindByUserId(userId int, limit string, startKey string) ([]response.OrdersResponse, string, error) {
 	result, lastKey, err := s.OrdersRepository.FindByUserId(userId, limit, startKey)
 	if err != nil {
 		return nil, "", err

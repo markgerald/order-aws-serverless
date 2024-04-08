@@ -11,5 +11,5 @@ type OrderService interface {
 	Delete(orderId string) (error error)
 	FindByID(orderId string) (*response.OrdersResponse, error)
 	FindAll(limit int, startKey string) ([]response.OrdersResponse, string, error)
-	FindByUserId(userId string, limit string, startKey string) ([]response.OrdersResponse, string, error)
+	FindByUserId(userId int, limit string, startKey string) ([]response.OrdersResponse, string, error)
 }

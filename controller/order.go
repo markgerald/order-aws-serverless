@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/markgerald/vw-order/data/request"
 	"github.com/markgerald/vw-order/data/response"
@@ -106,7 +107,12 @@ func (controller *OrderController) FindByUserId(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	limit := ctx.DefaultQuery("limit", "10")
 	startKey := ctx.Query("page")
-	ordersResponse, lastKey, err := controller.orderService.FindByUserId(userId, limit, startKey)
+	id, err := strconv.Atoi(userId)
+	if err != nil {
+		fmt.Printf("Error on conversion: %v\n", err)
+		return
+	}
+	ordersResponse, lastKey, err := controller.orderService.FindByUserId(id, limit, startKey)
 	if err != nil {
 		response.SendErrorResponse(ctx, 500, "Internal Server Error")
 		return
