@@ -90,15 +90,15 @@ func (r *OrdersRepositoryImpl) FindByUserId(userId int, limit string, startKey s
 	var orders []model.Order
 	table := r.Db.Table("orders-prod")
 	intConvert, _ := strconv.ParseInt(limit, 10, 64)
-	queryOp := table.Get("userId", userId).Limit(intConvert)
+	scanOp := table.Scan().Filter("'userId' = ?", userId).Limit(intConvert)
 	if startKey != "" {
-		queryOp.StartFrom(map[string]*dynamodb.AttributeValue{
+		scanOp.StartFrom(map[string]*dynamodb.AttributeValue{
 			"id": {
 				S: aws.String(startKey),
 			},
 		})
 	}
-	lastEvaluatedKey, err := queryOp.AllWithLastEvaluatedKey(&orders)
+	lastEvaluatedKey, err := scanOp.AllWithLastEvaluatedKey(&orders)
 	if err != nil {
 		log.Printf("Error fetching orders by userId: %v", err)
 		return nil, "", err
